@@ -1,0 +1,50 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <script src="{% static 'js/js.js'%}"></script>
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+    <navbar class="navbar">
+        <a href="/"><h1>{% trans "Anagrammami" %}</h1></a>
+        <div class="topmenu">
+    
+            {% if request.user.is_authenticated %}
+                <a href="/my-anagrams">{% trans "My anagrams" %}</a>
+                <a href="/logout">{% trans "Logout" %}</a>
+            {% else %}
+                <a href="/login">{% trans "Login" %}</a>
+                <a href="/register">{% trans "Sign up" %}</a>
+            {% endif %}
+
+            <div class="language-switcher">
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <select name="language" onchange="this.form.submit()">
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% for lang in LANGUAGES %}
+                            <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                                {{ lang.1 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+        </div>
+    </navbar>
+
+    {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "My anagrams" %}{% endblock %}
+
+{% block content %}
+    
+<div class="page-container">
+    <h1>{% trans "My anagrams" %}</h1>
+
+    {% if anagrams %}
+        <div class="myanagrams-container">
+            {% for angrams_list in anagrams %}
+                <div class="myanagrams-block" data-id="{{ angrams_list.id }}" >
+                    <div class="myanagrams-date">{{ angrams_list.create_date }}</div>
+                    <strong class="myanagrams-model">{{ angrams_list.model }}</strong>
+                    {{ angrams_list.anagrams|linebreaksbr }}
+                    <button class="delete-anagrams-btn" data-id="{{ angrams_list.id }}" >{% trans "Delete" %}</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-anagrams-message">
+            {% trans "You have no saved anagrams yet." %}
+        </div>
+    {% endif %}
+</div>
+    
+
+
+{% endblock %}

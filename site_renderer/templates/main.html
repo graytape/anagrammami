@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block title %}{% trans "Results" %}{% endblock %}
+
+{% block content %}
+    
+    <div class="topdiv">
+
+        <div id="reference" class="empty-state"></div>
+
+        <div class="textbar-container input-group">
+            <input type="text" name="textbar" class="textbar" id="textbar" class="textbar" placeholder="{% trans "Enter the text you want to anagram" %}" autocomplete="off" />
+            <button class="btn" id="btn-set-reference" data-resettext="{% trans "Reset" %}" data-settext="{% trans "Set Reference" %}" >{% trans "Set Reference" %}</button>
+        </div>
+        <div class="btns-container">
+            <button class="btn" id="btn-save-results" disabled>{% trans "Save Result" %}</button>
+            <button class="btn" id="btn-get-hints" data-text="{% trans "Get Hints" %}" disabled>{% trans "Get Hints" %}</button>
+        </div>
+    
+    </div>
+
+    <div class="bottomdiv">
+
+        <div class="results-container" id="anagram-results">
+            
+            <div class="results" id="saved-results"></div>
+            
+            {% if request.user.is_authenticated %}
+                <button class="btn mt20 hidden" id="btn-save-in-db" disabled>{% trans "Save results in the database" %}</button>
+            {% endif %}
+        
+        </div>
+
+        <div class="hints-container">
+            <div class="hints-stats"></div>
+            <div class="hints-box"></div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
