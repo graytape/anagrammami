@@ -77,8 +77,10 @@ document.addEventListener('DOMContentLoaded', function() {
       // reset textbar and enable buttons
       textbar.value = '';
       btnSaveResults.disabled = false;
-      btnSaveInDb.disabled = false;
       btnGetHints.disabled = false;
+      if (btnSaveInDb) {
+        btnSaveInDb.disabled = false;
+      }
     }
        
 
