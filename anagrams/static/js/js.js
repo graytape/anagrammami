@@ -153,7 +153,9 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="result-word">${word}${unusedString}</div>
       `;
       
-      btnSaveInDb.classList.remove('hidden');
+      if (btnSaveInDb) {
+        btnSaveInDb.classList.remove('hidden');
+      }
 
       // Prepend to results div
       savedResultsDiv.insertBefore(resultItem, savedResultsDiv.firstChild);
@@ -322,7 +324,9 @@ document.addEventListener('DOMContentLoaded', function() {
         referenceDiv.innerHTML = '';
         textbar.value = '';
         btnSaveResults.disabled = true;
-        btnSaveInDb.disabled = true;
+        if (btnSaveInDb)  {
+          btnSaveInDb.disabled = true;
+        }
       } else {
           setReference();
       }
