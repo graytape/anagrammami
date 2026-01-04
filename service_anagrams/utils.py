@@ -19,7 +19,7 @@ def generate_anagrams(word, lang=None, corpus=None, max=None):
             '280000_parole_italiane.txt',
             '660000_parole_italiane.txt'
         ]
-        corpus = corpora[3]
+        corpus = corpora[4]
 
     elif lang.lower() == 'en':
         lang = lang.lower()

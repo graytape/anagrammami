@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 20:38+0100\n"
+"POT-Creation-Date: 2026-01-04 20:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,80 +17,74 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
 #: service_auth/forms.py:22
-#, fuzzy
-#| msgid "Confirm Password"
 msgid "Confirm password"
-msgstr "Conferma la password"
+msgstr ""
 
 #: service_auth/forms.py:34
 msgid "Password don't match"
-msgstr "Le password non coincidono"
+msgstr ""
 
 #: service_auth/templates/login.html:7 service_auth/templates/login.html:17
 #: templates/base.html:26
 msgid "Login"
-msgstr "Login"
+msgstr ""
 
 #: service_auth/templates/register.html:3
 #: service_auth/templates/register.html:7
 #: service_auth/templates/register.html:13 templates/base.html:27
 msgid "Sign up"
-msgstr "Registrati"
+msgstr ""
 
 #: service_auth/views.py:53
 msgid "Wrong username or password"
-msgstr "Credenziali errate"
+msgstr ""
 
 #: site_renderer/templates/main.html:5
 msgid "Results"
-msgstr "Risultati"
+msgstr ""
 
 #: site_renderer/templates/main.html:14
 msgid "Enter the text you want to anagram"
-msgstr "Inserisci il testo che vuoi anagrammare"
+msgstr ""
 
 #: site_renderer/templates/main.html:15
 msgid "Reset"
-msgstr "Reset"
+msgstr ""
 
 #: site_renderer/templates/main.html:15
 msgid "Set Reference"
-msgstr "Imposta il modello"
+msgstr ""
 
 #: site_renderer/templates/main.html:18
 msgid "Save Anagram"
-msgstr "Salva anagramma"
+msgstr "Save Anagram"
 
 #: site_renderer/templates/main.html:19
 msgid "Get Hints"
-msgstr "Suggerimenti"
+msgstr ""
 
 #: site_renderer/templates/main.html:31
 msgid "Save results in the database"
-msgstr "Salva i risultati nel database"
+msgstr ""
 
 #: site_renderer/templates/my-anagrams.html:4
 #: site_renderer/templates/my-anagrams.html:9 templates/base.html:23
 msgid "My anagrams"
-msgstr "I miei anagrammi"
+msgstr ""
 
 #: site_renderer/templates/my-anagrams.html:18
 msgid "Delete"
-msgstr "Cancella"
+msgstr ""
 
 #: site_renderer/templates/my-anagrams.html:24
 msgid "You have no saved anagrams yet."
-msgstr "Non hai ancora degli anagrammi salvati"
+msgstr ""
 
 #: templates/base.html:19
 msgid "Anagrammami"
-msgstr "Anagrammami"
+msgstr ""
 
 #: templates/base.html:24
 msgid "Logout"
-msgstr "Esci"
-
-#~ msgid "Save Result"
-#~ msgstr "Salva i risultati"
+msgstr ""
