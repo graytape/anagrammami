@@ -17,6 +17,7 @@
         <div class="btns-container">
             <button class="btn" id="btn-save-results" disabled>{% trans "Save Anagram" %}</button>
             <button class="btn" id="btn-get-hints" data-text="{% trans "Get Hints" %}" disabled>{% trans "Get Hints" %}</button>
+            <button class="btn btn-icon" id="btn-settings" title="{% trans "Settings" %}">⚙</button>
         </div>
     
     </div>
@@ -38,6 +39,46 @@
             <div class="hints-box"></div>
         </div>
 
+    </div>
+
+    <!-- Settings modal -->
+    <div id="settings-modal" class="settings-modal hidden">
+        <div class="settings-modal-content">
+            <h2>{% trans "Anagram settings" %}</h2>
+
+            <div class="settings-field">
+                <label for="settings-corpus">{% trans "Corpus to use" %}</label>
+                <select id="settings-corpus"></select>
+            </div>
+
+            <div class="settings-field settings-field-inline">
+                <div>
+                    <label for="settings-min-length">{% trans "Minimum word length" %}</label>
+                    <input type="number" id="settings-min-length" min="1" value="2" />
+                </div>
+                <div>
+                    <label for="settings-max-length">{% trans "Maximum word length" %}</label>
+                    <input type="number" id="settings-max-length" min="1" value="20" />
+                </div>
+            </div>
+
+            <div class="settings-field">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="settings-prioritize-long" checked />
+                    <span>{% trans "Prioritize long words" %}</span>
+                </label>
+            </div>
+
+            <div class="settings-field">
+                <label for="settings-max-results">{% trans "Number of results" %}</label>
+                <input type="number" id="settings-max-results" min="1" value="500" />
+            </div>
+
+            <div class="settings-actions">
+                <button class="btn" id="settings-save">{% trans "Save" %}</button>
+                <button class="btn btn-secondary" id="settings-cancel">{% trans "Cancel" %}</button>
+            </div>
+        </div>
     </div>
 
 

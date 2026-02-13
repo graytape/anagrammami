@@ -11,6 +11,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const hintsContainer   = document.querySelector('.hints-container');
     const hintsBox         = document.querySelector('.hints-box');
     const hintsStats       = document.querySelector('.hints-stats');
+    const btnSettings      = document.getElementById('btn-settings');
+
+    // Settings modal elements
+    const settingsModal          = document.getElementById('settings-modal');
+    const settingsCorpusSelect   = document.getElementById('settings-corpus');
+    const settingsMinLengthInput = document.getElementById('settings-min-length');
+    const settingsMaxLengthInput = document.getElementById('settings-max-length');
+    const settingsPrioritizeLong = document.getElementById('settings-prioritize-long');
+    const settingsMaxResults     = document.getElementById('settings-max-results');
+    const settingsSaveBtn        = document.getElementById('settings-save');
+    const settingsCancelBtn      = document.getElementById('settings-cancel');
     
     let referenceText  = '';
     let availableChars = [];
@@ -18,6 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let previousValue  = '';
 
     window.saved_anagrams = [];
+
+    // Keep a copy of the last loaded settings (for reference in the UI)
+    let userSettings = null;
+    let isAuthenticated = null;
     
     // Special characters always allowed
     const specialChars = new Set(['?', '!', ',', '.', ';', ':', '-', '_', '@', '#', '(', ')', '[', ']', '{', '}', '/', '\\', '\'', '"', '+', '=', '*', '&', '%', ' ', '€', '£', '<', '>']);
@@ -62,6 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
       previousValue = '';
 
       btnSetReference.innerHTML = btnSetReference.dataset.resettext;
+      btnSetReference.classList.add('reset');
+      console.log('Reference set to:', referenceText);
       
       // reset reference
       referenceDiv.innerHTML = '';
@@ -256,6 +273,144 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+    // SETTINGS HANDLING
+
+    function openSettingsModal() {
+      if (!settingsModal) return;
+
+      // If we already loaded settings once, just reuse them
+      if (userSettings) {
+        applySettingsToForm(userSettings);
+        settingsModal.classList.remove('hidden');
+        return;
+      }
+
+      loadUserSettings().then(() => {
+        settingsModal.classList.remove('hidden');
+      });
+    }
+
+    function closeSettingsModal() {
+      if (!settingsModal) return;
+      settingsModal.classList.add('hidden');
+    }
+
+    function applySettingsToForm(settings) {
+      if (!settingsCorpusSelect) return;
+
+      // Populate corpus select if not already populated
+      if (settingsCorpusSelect.options.length === 0 && settings.corpora) {
+        settings.corpora.forEach(item => {
+          const opt = document.createElement('option');
+          opt.value = item.key;
+          opt.textContent = item.label;
+          settingsCorpusSelect.appendChild(opt);
+        });
+      }
+
+      if (settings.corpus_key && settingsCorpusSelect) {
+        settingsCorpusSelect.value = settings.corpus_key;
+      }
+
+      if (settingsMinLengthInput && typeof settings.min_word_length !== 'undefined') {
+        settingsMinLengthInput.value = settings.min_word_length;
+      }
+      if (settingsMaxLengthInput && typeof settings.max_word_length !== 'undefined') {
+        settingsMaxLengthInput.value = settings.max_word_length;
+      }
+      if (settingsMaxResults && typeof settings.max_results !== 'undefined') {
+        settingsMaxResults.value = settings.max_results;
+      }
+      if (settingsPrioritizeLong && typeof settings.prioritize_long_words !== 'undefined') {
+        settingsPrioritizeLong.checked = !!settings.prioritize_long_words;
+      }
+    }
+
+    function loadUserSettings() {
+      const lang = document.documentElement.lang || 'it';
+
+      return fetch(`/anagrams/settings/?lang=${encodeURIComponent(lang)}`, {
+        method: 'GET',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status !== 'success') {
+            throw new Error(data.message || 'Unable to load settings');
+          }
+
+          // data.settings contains the values, data.corpora contains available corpora
+          isAuthenticated = !!data.is_authenticated;
+
+          let baseSettings = Object.assign({}, data.settings);
+
+          // If the user is anonymous, try to override with cookie-stored settings
+          if (!isAuthenticated) {
+            const cookieSettings = getSettingsFromCookie();
+            if (cookieSettings) {
+              baseSettings = Object.assign(baseSettings, cookieSettings);
+            }
+          }
+
+          userSettings = baseSettings;
+
+          // Merge corpora list into the object we pass to the form
+          const settingsForForm = Object.assign({}, baseSettings, { corpora: data.corpora || [] });
+          applySettingsToForm(settingsForForm);
+        })
+        .catch(error => {
+          console.error('Error loading settings:', error);
+          alert('Error loading settings: ' + error);
+        });
+    }
+
+    function saveUserSettings() {
+      const lang = document.documentElement.lang || 'it';
+
+      const payload = {
+        lang: lang,
+        corpus_key: settingsCorpusSelect ? settingsCorpusSelect.value : undefined,
+        min_word_length: settingsMinLengthInput ? settingsMinLengthInput.value : undefined,
+        max_word_length: settingsMaxLengthInput ? settingsMaxLengthInput.value : undefined,
+        prioritize_long_words: settingsPrioritizeLong ? settingsPrioritizeLong.checked : true,
+        max_results: settingsMaxResults ? settingsMaxResults.value : undefined,
+      };
+
+      // If the user is not authenticated, store preferences in a cookie only.
+      if (isAuthenticated === false) {
+        setSettingsCookie(payload);
+        userSettings = Object.assign({}, payload);
+        showSaveConfirm(gettext('Settings saved'));
+        closeSettingsModal();
+        return;
+      }
+
+      fetch('/anagrams/settings/save/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify(payload),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            userSettings = Object.assign({}, data.settings);
+            showSaveConfirm(gettext('Settings saved'));
+            closeSettingsModal();
+          } else {
+            alert(data.message || 'Error saving settings');
+          }
+        })
+        .catch(error => {
+          alert('Network or server error: ' + error);
+        });
+    }
+
+
 
   // helper to get cookie CSRF (standard Django)
   function getCookie(name) {
@@ -271,6 +426,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     return cookieValue;
+  }
+
+  // Read settings from cookie (used for anonymous users)
+  function getSettingsFromCookie() {
+    const raw = getCookie('anagram_settings');
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      console.error('Error parsing anagram_settings cookie', e);
+      return null;
+    }
+  }
+
+  // Save settings to cookie (for anonymous users)
+  function setSettingsCookie(settings) {
+    const data = {
+      corpus_key: settings.corpus_key,
+      min_word_length: settings.min_word_length,
+      max_word_length: settings.max_word_length,
+      prioritize_long_words: settings.prioritize_long_words,
+      max_results: settings.max_results,
+    };
+
+    try {
+      const value = encodeURIComponent(JSON.stringify(data));
+      const days = 365;
+      const d = new Date();
+      d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `anagram_settings=${value};expires=${d.toUTCString()};path=/`;
+    } catch (e) {
+      console.error('Error serializing settings to cookie', e);
+    }
   }
 
   function showSaveConfirm(message = "Saved!") {
@@ -305,6 +493,34 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
 
+  // Open settings modal
+  if (btnSettings && settingsModal) {
+    btnSettings.addEventListener('click', function () {
+      openSettingsModal();
+    });
+  }
+
+  // Save / cancel settings
+  if (settingsSaveBtn) {
+    settingsSaveBtn.addEventListener('click', function () {
+      saveUserSettings();
+    });
+  }
+  if (settingsCancelBtn) {
+    settingsCancelBtn.addEventListener('click', function () {
+      closeSettingsModal();
+    });
+  }
+
+  // Close modal when clicking on backdrop
+  if (settingsModal) {
+    settingsModal.addEventListener('click', function (e) {
+      if (e.target === settingsModal) {
+        closeSettingsModal();
+      }
+    });
+  }
+
   // Delete saved anagrams
   if (deleteButtons) {
       deleteButtons.forEach(btn => {
@@ -320,6 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
     btnSetReference.addEventListener('click', () => {
       if (referenceText != '') {
         btnSetReference.innerHTML = btnSetReference.dataset.settext;
+        btnSetReference.classList.remove('reset');
         referenceText = '';
         referenceDiv.innerHTML = '';
         textbar.value = '';

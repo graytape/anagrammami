@@ -60,7 +60,12 @@ def register_handlers():
             await event.respond("Nessun anagramma trovato.")
             return
         
-        await event.respond(f"Trovati {anagrams['n_results']} anagrammi con {anagrams['recursion']} ricorsioni e {anagrams['words']} parole completate:")
+        corpus_name = anagrams.get('corpus') or 'corpus predefinito'
+        await event.respond(
+            f"Trovati {anagrams['n_results']} anagrammi "
+            f"(corpus: {corpus_name}) "
+            f"con {anagrams['recursion']} ricorsioni e {anagrams['words']} parole completate:"
+        )
 
 
         chunks = chunk_anagrams(anagrams['anagrams'])

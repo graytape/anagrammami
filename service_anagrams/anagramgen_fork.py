@@ -68,7 +68,7 @@ class AnagramGenerator:
     using exactly the letters from a given string.
     """
     
-    def __init__(self, corpus):
+    def __init__(self, corpus, corpus_name: str | None = None):
         """
         Initialize the generator with a word corpus.
         
@@ -76,6 +76,8 @@ class AnagramGenerator:
             corpus (list): List of words to use for generating anagrams
         """
         self.t = Trie()
+        # Optional human-readable identifier for the corpus being used
+        self.corpus_name = corpus_name
         word_count = 0
         print(f"Loading corpus...")
         for word in corpus:
@@ -101,7 +103,15 @@ class AnagramGenerator:
             f[letter] += 1
         return f
 
-    def generate(self, string, max_results=10000, timeout=30):
+    def generate(
+        self,
+        string,
+        max_results=10000,
+        timeout=30,
+        prioritize_long_words: bool = True,
+        min_word_length: int | None = None,
+        max_word_length: int | None = None,
+    ):
         """
         Generate all possible anagrams of the given string, sorted to prioritize
         solutions with longer words first.
@@ -139,7 +149,18 @@ class AnagramGenerator:
         
         # Generate all anagrams with limits
         try:
-            self.__generate(anagrams, self.t.root, [], "", f, 0, max_results, start_time, timeout, stats)
+            self.__generate(
+                anagrams,
+                self.t.root,
+                [],
+                "",
+                f,
+                0,
+                max_results,
+                start_time,
+                timeout,
+                stats,
+            )
         except TimeoutError as e:
             print(f"\n⚠️  {e}")
         except MaxResultsError as e:
@@ -153,6 +174,24 @@ class AnagramGenerator:
         print(f"Words completed: {stats['completed_words']}")
         print(f"Max recursion depth: {stats['max_depth']}")
 
+        # Optionally post-filter by word length constraints
+        if min_word_length is not None or max_word_length is not None:
+            original_count = len(anagrams)
+            anagrams = [
+                phrase
+                for phrase in anagrams
+                if all(
+                    (min_word_length is None or len(word) >= min_word_length)
+                    and (max_word_length is None or len(word) <= max_word_length)
+                    for word in phrase
+                )
+            ]
+            print(
+                f"Filtered anagrams by word length "
+                f"(min={min_word_length}, max={max_word_length}): "
+                f"{original_count} -> {len(anagrams)}"
+            )
+
         if len(anagrams) == 0:
             print("⚠️  No anagrams found. This could mean:")
             print("   - The word/phrase is too long for the corpus")
@@ -160,24 +199,29 @@ class AnagramGenerator:
             return {
                 'success': False,
                 'n_results': 0,
-                'anagrams': []
+                'corpus': self.corpus_name,
+                'anagrams': [],
             }
 
         # Sort anagrams to prioritize longer words
         # First by average word length (descending)
         # Then by number of words (ascending - fewer words = longer words)
-        print(f"Sorting results...")
-        anagrams.sort(key=lambda phrase: (
-            -sum(len(word) for word in phrase) / len(phrase),  # Average length descending
-            len(phrase)  # Number of words ascending
-        ))
+        if prioritize_long_words:
+            print(f"Sorting results (prioritizing longer words)...")
+            anagrams.sort(
+                key=lambda phrase: (
+                    -sum(len(word) for word in phrase) / len(phrase),  # Average length descending
+                    len(phrase),  # Number of words ascending
+                )
+            )
 
         result = {
             'success'  : True,
             'n_results': len(anagrams),
             'recursion': stats['calls'],
             'words'    : stats['completed_words'],
-            'anagrams' : anagrams
+            'anagrams' : anagrams,
+            'corpus'   : self.corpus_name,
         }
         return result
         

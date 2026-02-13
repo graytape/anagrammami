@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 20:40+0100\n"
+"POT-Creation-Date: 2026-02-13 11:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: service_auth/forms.py:22
 msgid "Confirm password"
 msgstr ""
@@ -64,8 +65,44 @@ msgstr "Save Anagram"
 msgid "Get Hints"
 msgstr ""
 
-#: site_renderer/templates/main.html:31
+#: site_renderer/templates/main.html:20
+msgid "Settings"
+msgstr ""
+
+#: site_renderer/templates/main.html:32
 msgid "Save results in the database"
+msgstr ""
+
+#: site_renderer/templates/main.html:47
+msgid "Anagram settings"
+msgstr ""
+
+#: site_renderer/templates/main.html:50
+msgid "Corpus to use"
+msgstr ""
+
+#: site_renderer/templates/main.html:56
+msgid "Minimum word length"
+msgstr ""
+
+#: site_renderer/templates/main.html:60
+msgid "Maximum word length"
+msgstr ""
+
+#: site_renderer/templates/main.html:68
+msgid "Prioritize long words"
+msgstr ""
+
+#: site_renderer/templates/main.html:73
+msgid "Number of results"
+msgstr ""
+
+#: site_renderer/templates/main.html:78
+msgid "Save"
+msgstr ""
+
+#: site_renderer/templates/main.html:79
+msgid "Cancel"
 msgstr ""
 
 #: site_renderer/templates/my-anagrams.html:4

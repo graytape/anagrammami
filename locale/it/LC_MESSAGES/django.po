@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 20:38+0100\n"
+"POT-Creation-Date: 2026-02-13 11:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,9 +67,45 @@ msgstr "Salva anagramma"
 msgid "Get Hints"
 msgstr "Suggerimenti"
 
-#: site_renderer/templates/main.html:31
+#: site_renderer/templates/main.html:20
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: site_renderer/templates/main.html:32
 msgid "Save results in the database"
 msgstr "Salva i risultati nel database"
+
+#: site_renderer/templates/main.html:47
+msgid "Anagram settings"
+msgstr "Impostazioni"
+
+#: site_renderer/templates/main.html:50
+msgid "Corpus to use"
+msgstr "Corpus da utilizzare"
+
+#: site_renderer/templates/main.html:56
+msgid "Minimum word length"
+msgstr "Lunghezza minima"
+
+#: site_renderer/templates/main.html:60
+msgid "Maximum word length"
+msgstr "Lunghezza massima"
+
+#: site_renderer/templates/main.html:68
+msgid "Prioritize long words"
+msgstr "Preferisci le parole più lunghe"
+
+#: site_renderer/templates/main.html:73
+msgid "Number of results"
+msgstr "Numero risultati"
+
+#: site_renderer/templates/main.html:78
+msgid "Save"
+msgstr "Salva"
+
+#: site_renderer/templates/main.html:79
+msgid "Cancel"
+msgstr "Annulla"
 
 #: site_renderer/templates/my-anagrams.html:4
 #: site_renderer/templates/my-anagrams.html:9 templates/base.html:23

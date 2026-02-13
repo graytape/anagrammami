@@ -12,7 +12,11 @@ body {margin:0; padding: 0; font-family: "Rubik", sans-serif; min-height:100vh; 
 
 .mt20 {margin-top:20px;}
 
-.topdiv {padding:50px; text-align:center;}
+.topdiv {
+  padding: 50px;
+  text-align:center;
+  height: 350px;
+}
 
 .loader {
     width: 20px;
@@ -74,8 +78,12 @@ h1 {margin: 10px 0 30px 0;}
     margin-top: 5px;   
 }
 
+.btns-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
 .btns-container .btn {
-  margin: 20px 5px;
   width: 240px;
   vertical-align: top;
 }
@@ -94,6 +102,31 @@ h1 {margin: 10px 0 30px 0;}
 }
 .btn:not(:disabled):hover{
   background: #aba1e7;
+}
+
+.btn-icon {
+  width: 60px !important;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.btn.btn-secondary {
+  background: #e5e5e5;
+}
+.btn.btn-secondary:not(:disabled):hover {
+  background: #cccccc;
+}
+
+.btn.reset {
+  position: absolute;
+  width: auto !important;
+  font-size: 10px;
+  padding: 15px 10px;
+  right: 10px;
+  top: 10px;
 }
 
 .page-container {padding: 10px 40px; max-width: 1600px;}
@@ -130,6 +163,10 @@ h1 {margin: 10px 0 30px 0;}
     margin-bottom: 15px;
 }
 
+.textbar-container.input-group {
+  position: relative;
+}
+
 #textbar {
     flex: 1;
     padding: 20px;
@@ -159,7 +196,7 @@ h1 {margin: 10px 0 30px 0;}
 }
 
 .hints-container {
-    max-height: 30em;
+    max-height: calc(100vh - 80px - 350px - 20px);
     overflow-y: auto;
     width: 100%;
     max-width: 50vw;
@@ -175,10 +212,88 @@ h1 {margin: 10px 0 30px 0;}
   color: #666;
 }
 
+@media screen and (max-width: 600px) {
+  .hints-stats .recursions {
+    float: none;
+    display: block;
+  }
+}
+
 .hints-box {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1px;
+}
+
+/* Settings modal */
+.settings-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Ensure hidden class actually hides the modal,
+   overriding the base display:flex above */
+.settings-modal.hidden {
+  display: none !important;
+}
+
+.settings-modal-content {
+  background: #ffffff;
+  padding: 24px 28px;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 480px;
+}
+
+.settings-modal-content h2 {
+  margin-bottom: 16px;
+}
+
+.settings-field {
+  margin-bottom: 12px;
+}
+
+.settings-field-inline {
+  display: flex;
+  gap: 10px;
+}
+
+.settings-field-inline > div {
+  flex: 1;
+}
+
+.settings-field label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.settings-field input[type="number"],
+.settings-field select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+.checkbox-label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
 }
 
 .login-container {
@@ -348,7 +463,7 @@ h1 {margin: 10px 0 30px 0;}
 
   .textbar-container.input-group {
     gap:3px;
-    flex-wrap: wrap
+    flex-wrap: wrap;
   }
   .textbar-container.input-group .btn {
     width:100%;
